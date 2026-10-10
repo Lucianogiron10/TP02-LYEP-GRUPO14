@@ -10,6 +10,15 @@
     margin-bottom:25px;
 }
 
+.tabla-clientes-scroll{
+    max-width:100%;
+    overflow-x:auto;
+}
+
+.tabla-clientes{
+    min-width:850px;
+}
+
 .contenedor-buscador{
     background:#d63384;
     width:700px;
@@ -119,4 +128,4 @@ input[type="text"]{
 
 input[type="text"]::placeholder{
     color:#c78aa6;
-} 
+}

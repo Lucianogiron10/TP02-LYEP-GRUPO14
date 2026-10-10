@@ -47,3 +47,24 @@
     transform: translateY(-2px);
 }
 
+@media (max-width: 640px) {
+    .navbar {
+        padding:18px;
+    }
+
+    .navbar .container {
+        flex-wrap:wrap;
+        gap:12px;
+    }
+
+    .navbar-brand {
+        white-space:normal;
+        font-size:1.25rem;
+        letter-spacing:0;
+    }
+
+    .usuario-header {
+        flex-wrap:wrap;
+    }
+}
+
