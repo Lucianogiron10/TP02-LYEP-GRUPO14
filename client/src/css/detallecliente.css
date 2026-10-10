@@ -23,6 +23,7 @@
 .detalle-cliente p{
     margin:12px 0;
     color:#5f4b57;
+    overflow-wrap:anywhere;
 }
 
 .detalle-cliente strong{
