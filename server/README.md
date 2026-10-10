@@ -9,7 +9,7 @@
 
 ## Ejecución
 
-- `npm start`: verifica la conexión a MongoDB.
-- `npm run dev`: hace lo mismo y reinicia el proceso ante cambios.
+- `npm start`: conecta con MongoDB e inicia la API en `http://localhost:3001`.
+- `npm run dev`: inicia la API y reinicia el proceso ante cambios.
 
-El modelo `Cliente` conserva los campos de nombre, email, teléfono, usuario y dirección que utiliza la interfaz. No almacena contraseñas.
+La API expone operaciones CRUD en `/api/clientes`: `GET` lista o consulta un cliente, `POST` crea, `PUT` actualiza y `DELETE` elimina. El modelo `Cliente` conserva los campos de nombre, email, teléfono, usuario y dirección que utiliza la interfaz. No almacena contraseñas.
