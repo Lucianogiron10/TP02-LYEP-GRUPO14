@@ -1,0 +1,15 @@
+# Backend: conexión y modelo
+
+## Configuración
+
+1. Desde `server/`, instala las dependencias con `npm install`.
+2. Copia `.env.example` como `.env`.
+3. Sustituye `MONGODB_URI` por la URI de MongoDB Atlas con las credenciales vigentes. No compartas ni subas ese archivo.
+4. En Atlas, permite la conexión desde la IP de desarrollo y confirma que el usuario tenga permisos sobre la base de datos.
+
+## Ejecución
+
+- `npm start`: verifica la conexión a MongoDB.
+- `npm run dev`: hace lo mismo y reinicia el proceso ante cambios.
+
+El modelo `Cliente` conserva los campos de nombre, email, teléfono, usuario y dirección que utiliza la interfaz. No almacena contraseñas.
