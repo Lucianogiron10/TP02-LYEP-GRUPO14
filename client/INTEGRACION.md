@@ -50,7 +50,7 @@ GET, POST, PUT, DELETE y OPTIONS, incluido el encabezado Content-Type.
   tiene cuatro errores previos en App.jsx, AutorizacionesContext.jsx y
   routes.jsx.
 
-## Dependencia pendiente de los integrantes A y B
+## Integracion del backend de los integrantes A y B
 
 Al revisar `origin/main` en el commit `038d9d5`, `server/index.js` solo
 conecta MongoDB: no inicia Express ni publica rutas. La rama
@@ -58,11 +58,15 @@ conecta MongoDB: no inicia Express ni publica rutas. La rama
 para productos (`name`, `description`, `price`) y no dispone de GET por id.
 Ese contrato no es compatible con las fichas de clientes.
 
-El frontend queda preparado para las rutas de clientes indicadas arriba.
-Es necesario que el integrante B las publique usando el modelo Cliente
-del integrante A. La persistencia real en Atlas y el CORS del backend del
-equipo aun no pudieron verificarse. Las pruebas con API simulada no
-acreditan esos puntos ni implementan un backend de reemplazo.
+La rama `feature/Giron-Luciano-Backend-Integration` agrega las rutas de
+clientes indicadas arriba usando el modelo Cliente del integrante A,
+Express en el puerto 3001 y CORS para localhost:5173. Es necesario trabajar
+con esa rama o integrar su PR antes de probar el flujo completo.
+
+El backend incorpora pruebas con MongoDB temporal real. La comprobacion
+con Atlas sigue requiriendo `server/.env`, credenciales vigentes y la IP
+autorizada. El integrante D dispone de los casos de prueba en
+`server/QA.md`; las pruebas locales no acreditan la conexion a Atlas.
 
 ## Uso de IA
 
