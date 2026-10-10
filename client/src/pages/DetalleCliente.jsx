@@ -1,43 +1,54 @@
 import '../css/detallecliente.css'
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import useAutorizaciones from '../hooks/useAutorizaciones'
+import clientesService from "../services/clientesService";
+import { mensajeErrorApi } from "../services/api";
+import FormCliente from "../components/FormCliente";
  
 const DetalleCliente = () => {
- const { id } = useParams();
+  const { id } = useParams();
+  return <FichaCliente key={id} id={id} />;
+};
+
+const FichaCliente = ({ id }) => {
   const navigate = useNavigate();
   const { admin } = useAutorizaciones()
   const role = admin?.sector;
 
   const [cliente, setCliente] = useState(null);
   const [mensaje, setMensaje] = useState("");
+  const [error, setError] = useState("");
+  const [editando, setEditando] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
 
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/users/${id}`)
-      .then((res) => res.json())
-      .then((data) => setCliente(data));
+    const controller = new AbortController();
+    clientesService.obtenerCliente(id, { signal: controller.signal })
+      .then(setCliente)
+      .catch((error) => {
+        if (controller.signal.aborted) return;
+        setError(mensajeErrorApi(error, "Error al cargar el cliente."));
+      });
+    return () => controller.abort();
   }, [id]);
 
   const eliminarCliente = async () => {
+    setMensaje("");
+    setError("");
+    setEliminando(true);
     try {
-      const respuesta = await fetch(
-        `https://fakestoreapi.com/users/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (respuesta.ok) {
-        setMensaje("Cliente eliminado correctamente");
-
-        setTimeout(() => {
-          navigate("/clientes");
-        }, 2000);
-      }
+      await clientesService.eliminarCliente(id);
+      navigate("/clientes", { replace: true });
     } catch (error) {
-      setMensaje("Error al eliminar cliente");
+      setError(mensajeErrorApi(error, "Error al eliminar cliente."));
+    } finally {
+      setEliminando(false);
     }
   };
+  if (error && !cliente) {
+    return <div role="alert"><h2>{error}</h2><Link to="/clientes">Volver a clientes</Link></div>;
+  }
   if (!cliente) {
     return <h2>Cargando cliente...</h2>;
   }
@@ -48,6 +59,21 @@ const DetalleCliente = () => {
       <p>Rol actual: {role}</p>
 
       {mensaje && <p className = 'mensaje-eliminado'>{mensaje}</p>}
+      {error && <p role="alert">{error}</p>}
+      <Link to="/clientes">Volver a clientes</Link>
+
+      {editando && (
+        <FormCliente
+          cliente={cliente}
+          onCancelar={() => setEditando(false)}
+          onGuardado={(actualizado) => {
+            setCliente(actualizado);
+            setEditando(false);
+            setMensaje("Cliente actualizado correctamente");
+            setError("");
+          }}
+        />
+      )}
 
       <p>
         <strong>ID:</strong> {cliente.id}
@@ -84,20 +110,21 @@ const DetalleCliente = () => {
         <strong>Ciudad:</strong> {cliente.address.city}
       </p>
 
-      <h2>Credenciales</h2>
+      <h2>Usuario</h2>
 
       <p>
         <strong>Usuario:</strong> {cliente.username}
       </p>
 
-      <p>
-        <strong>Contraseña:</strong> {cliente.password}
-      </p>
-
-      {role?.trim() === "Gerencia" && (
-        <button className='btn-eliminar'onClick={eliminarCliente}>
-          Eliminar Cliente
-        </button>
+      {role?.trim() === "Gerencia" && !editando && (
+        <>
+          <button className="btn-ficha" disabled={eliminando} onClick={() => setEditando(true)}>
+            Editar Cliente
+          </button>
+          <button className='btn-eliminar' disabled={eliminando} onClick={eliminarCliente}>
+            {eliminando ? "Eliminando..." : "Eliminar Cliente"}
+          </button>
+        </>
       )}
     </div>
   );

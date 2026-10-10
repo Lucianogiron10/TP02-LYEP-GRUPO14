@@ -2,6 +2,7 @@ import "../css/listaclientes.css"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FormCliente from "../components/FormCliente";
+import clientesService from "../services/clientesService";
 
 const ListaClientes = () => {
   const [clientes, setClientes] = useState([]);
@@ -10,24 +11,20 @@ const ListaClientes = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/users")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Error al obtener clientes");
-        }
-        return res.json();
-      })
+    const controller = new AbortController();
+    clientesService.obtenerClientes({ signal: controller.signal })
       .then((data) => {
         setClientes(data);
         setLoading(false);
       })
       .catch(() => {
+        if (controller.signal.aborted) return;
         setError(true);
         setLoading(false);
       });
+    return () => controller.abort();
   }, []);
 
-  // Código nuevo y corregido
 const clientesFiltrados = clientes.filter(cliente => 
   (cliente.name?.lastname || "").toLowerCase().includes(busqueda.toLowerCase()) || 
   (cliente.address?.city || "").toLowerCase().includes(busqueda.toLowerCase())
@@ -45,7 +42,7 @@ const clientesFiltrados = clientes.filter(cliente =>
     <div className="clientes-container">
 
       <h1>Clientes</h1>
-      <FormCliente />
+      <FormCliente onGuardado={(cliente) => setClientes((actuales) => [...actuales, cliente])} />
 
       <hr />
 
@@ -68,6 +65,7 @@ const clientesFiltrados = clientes.filter(cliente =>
         </p>
 
       </div>
+      <div className="tabla-clientes-scroll" role="region" aria-label="Listado de clientes" tabIndex={0}>
       <table className="tabla-clientes">
 
         <thead>
@@ -110,9 +108,14 @@ const clientesFiltrados = clientes.filter(cliente =>
             </tr>
           ))}
 
+          {clientesFiltrados.length === 0 && (
+            <tr><td colSpan={6}>No se encontraron clientes.</td></tr>
+          )}
+
         </tbody>
 
       </table>
+      </div>
 
     </div>
   );

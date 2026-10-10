@@ -2,13 +2,15 @@ import '../css/formcliente.css'
 import { useState } from "react";
 import { Form, Button, Alert, Spinner } from "react-bootstrap";
 import clientesService from "../services/clientesService";
+import { mensajeErrorApi } from "../services/api";
 
-const FormCliente = () => {
+const FormCliente = ({ cliente, onGuardado, onCancelar }) => {
 
-    const [nombre, setNombre] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefono, setTelefono] = useState("");
-    const [ciudad, setCiudad] = useState("");
+    const [nombre, setNombre] = useState(cliente?.name.firstname || "");
+    const [apellido, setApellido] = useState(cliente?.name.lastname || "");
+    const [email, setEmail] = useState(cliente?.email || "");
+    const [telefono, setTelefono] = useState(cliente?.phone || "");
+    const [ciudad, setCiudad] = useState(cliente?.address.city || "");
 
     const [mensaje, setMensaje] = useState("");
     const [error, setError] = useState("");
@@ -23,6 +25,7 @@ const FormCliente = () => {
 
         if (
             nombre.trim() === "" ||
+            apellido.trim() === "" ||
             email.trim() === "" ||
             telefono.trim() === "" ||
             ciudad.trim() === ""
@@ -35,46 +38,48 @@ const FormCliente = () => {
 
         const nuevoCliente = {
 
-            email,
+            email: email.trim(),
 
-            username: nombre.toLowerCase().replace(/\s/g, ""),
-
-            password: "1234",
+            username: cliente?.username || nombre.trim().toLowerCase().replace(/\s/g, ""),
 
             name: {
-                firstname: nombre,
-                lastname: "-"
+                firstname: nombre.trim(),
+                lastname: apellido.trim()
             },
 
             address: {
-                city: ciudad
+                ...cliente?.address,
+                city: ciudad.trim()
             },
 
-            phone: telefono
+            phone: telefono.trim()
         };
 
         try {
 
             setLoading(true);
 
-            const respuesta =
-                await clientesService.crearCliente(
-                    nuevoCliente
-                );
+            const respuesta = cliente
+                ? await clientesService.actualizarCliente(cliente.id, nuevoCliente)
+                : await clientesService.crearCliente(nuevoCliente);
 
             setMensaje(
-                `Cliente creado correctamente. ID: ${respuesta.id}`
+                `Cliente ${cliente ? "actualizado" : "creado"} correctamente. ID: ${respuesta.id}`
             );
 
-            setNombre("");
-            setEmail("");
-            setTelefono("");
-            setCiudad("");
+            if (!cliente) {
+                setNombre("");
+                setApellido("");
+                setEmail("");
+                setTelefono("");
+                setCiudad("");
+            }
+            onGuardado?.(respuesta);
 
-        } catch {
+        } catch (error) {
 
             setError(
-                "Ocurrió un error al crear el cliente."
+                mensajeErrorApi(error, "Ocurrió un error al guardar el cliente.")
             );
 
         } finally {
@@ -89,15 +94,17 @@ const FormCliente = () => {
 
         <div className='formulario-cliente'>
 
-            <h3>Nuevo Cliente</h3>
+            <h3>{cliente ? "Editar Cliente" : "Nuevo Cliente"}</h3>
 
             <Form onSubmit={manejarSubmit}>
 
                 <Form.Group className="mb-3">
 
-                    <Form.Label>Nombre</Form.Label>
+                    <Form.Label htmlFor="cliente-nombre">Nombre</Form.Label>
 
                     <Form.Control
+                        id="cliente-nombre"
+                        required
                         type="text"
                         value={nombre}
                         onChange={(e) =>
@@ -108,10 +115,23 @@ const FormCliente = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
+                    <Form.Label htmlFor="cliente-apellido">Apellido</Form.Label>
+                    <Form.Control
+                        id="cliente-apellido"
+                        type="text"
+                        required
+                        value={apellido}
+                        onChange={(e) => setApellido(e.target.value)}
+                    />
+                </Form.Group>
 
-                    <Form.Label>Email</Form.Label>
+                <Form.Group className="mb-3">
+
+                    <Form.Label htmlFor="cliente-email">Email</Form.Label>
 
                     <Form.Control
+                        id="cliente-email"
+                        required
                         type="email"
                         value={email}
                         onChange={(e) =>
@@ -123,9 +143,11 @@ const FormCliente = () => {
 
                 <Form.Group className="mb-3">
 
-                    <Form.Label>Teléfono</Form.Label>
+                    <Form.Label htmlFor="cliente-telefono">Teléfono</Form.Label>
 
                     <Form.Control
+                        id="cliente-telefono"
+                        required
                         type="text"
                         value={telefono}
                         onChange={(e) =>
@@ -137,9 +159,11 @@ const FormCliente = () => {
 
                 <Form.Group className="mb-3">
 
-                    <Form.Label>Ciudad</Form.Label>
+                    <Form.Label htmlFor="cliente-ciudad">Ciudad</Form.Label>
 
                     <Form.Control
+                        id="cliente-ciudad"
+                        required
                         type="text"
                         value={ciudad}
                         onChange={(e) =>
@@ -162,6 +186,12 @@ const FormCliente = () => {
                     }
 
                 </Button>
+
+                {onCancelar && (
+                    <Button variant="secondary" type="button" disabled={loading} onClick={onCancelar}>
+                        Cancelar
+                    </Button>
+                )}
 
             </Form>
 
