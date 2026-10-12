@@ -18,7 +18,6 @@ el origen CORS, por defecto http://localhost:5173. Si MongoDB no conecta,
 el proceso termina con error.
 
 La API publica GET/POST /api/clientes y GET/PUT/DELETE /api/clientes/:id.
-Para produccion se incluye .env.production.example sin credenciales.
 La configuracion completa y la ejecucion del frontend estan en el
 [README general](../README.md).
 

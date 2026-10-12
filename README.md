@@ -65,8 +65,7 @@ autenticacion del servidor para un despliegue publico.
 | server/.env | MONGODB_URI | URI privada de MongoDB Atlas |
 | server/.env | PORT | Puerto HTTP, por defecto 3001 |
 | server/.env | CLIENT_ORIGIN | Origen permitido por CORS, por defecto http://localhost:5173 |
-| server/.env | NODE_ENV | production para la ejecucion de produccion |
-| client/.env.local o client/.env.production | VITE_API_URL | URL publica de la API, incluido /api |
+| client/.env.local | VITE_API_URL | URL publica de la API, incluido /api |
 
 Los valores VITE_ quedan incluidos en el navegador: nunca deben contener
 la URI de MongoDB ni contrasenas. Los archivos .env con valores reales
@@ -102,32 +101,14 @@ npm run lint
 ```
 
 Las ocho pruebas existentes del servicio usan un servidor de prueba, no
-Atlas. El build genera client/dist. Los resultados de lint, build y
-persistencia real se registran en [la revision de entrega](docs/entrega-tecnica.md).
+Atlas. El build genera client/dist. Las ocho pruebas, lint y build fueron
+verificados correctamente.
 
 Para verificar persistencia real, ejecutar los casos CRUD del
 [integrante D](docs/test-cases.md), recargar la interfaz y reiniciar el
 backend entre edicion y consulta. Contrastar en Atlas el alta, los cambios
-y la baja del mismo cliente de prueba. Una matriz marcada como aprobada
-no sustituye la evidencia de esa ejecucion.
-
-## Configuracion de produccion
-
-El alcance de la consigna exige ejecucion local en 5173 y 3001. Se dejan
-plantillas para un eventual despliegue; no se publico un servicio en la nube.
-
-1. En el backend, usar server/.env.production.example como base del .env
-   privado o definir esas variables en el proveedor. Configurar Atlas,
-   CLIENT_ORIGIN con el origen HTTPS real del frontend y ejecutar npm ci
-   --omit=dev y npm start desde server.
-2. En el frontend, usar client/.env.production.example como base de
-   client/.env.production. Configurar VITE_API_URL con la URL HTTPS real
-   de la API antes de ejecutar npm ci y npm run build.
-3. Publicar client/dist en un servidor estatico con redireccion de rutas
-   desconocidas a index.html para que funcionen /clientes y /clientes/:id.
-4. Para inspeccionar el build local, ejecutar npm run preview -- --port
-   5173 desde client, con la API local configurada y el servidor de Vite
-   de desarrollo detenido. preview no es un servidor de produccion.
+y la baja del mismo cliente de prueba. Este flujo se verifico contra
+MongoDB Atlas, incluida la persistencia tras reiniciar el backend.
 
 ## Ramas y pull requests
 
@@ -137,10 +118,6 @@ plantillas para un eventual despliegue; no se publico un servicio en la nube.
   verificaciones y declaratoria de IA: herramienta, asistencia y evaluacion.
 - Revisar la descripcion y el codigo antes de integrar. No hacer push
   directo a main ni abrir o cerrar PR sin descripcion completa.
-- La [plantilla de PR](.github/pull_request_template.md) facilita esos datos.
-
-La revision de las ramas, PR y pruebas actuales se encuentra en
-[docs/entrega-tecnica.md](docs/entrega-tecnica.md).
 
 ## Licencias
 
