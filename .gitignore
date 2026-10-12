@@ -27,10 +27,8 @@ dist-ssr
 server/.env
 server/.env.*
 !server/.env.example
-!server/.env.production.example
 
 # Client environment (VITE_ variables are public in the compiled bundle)
 client/.env
 client/.env.*
 !client/.env.example
-!client/.env.production.example
