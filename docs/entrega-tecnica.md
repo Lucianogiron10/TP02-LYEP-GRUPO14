@@ -1,6 +1,6 @@
 # Revision de entrega: punto 4, Tecnica
 
-Revision del 11/10/2026 sobre main 87c92f7 y la rama
+Revision del 11/10/2026 sobre main 9e2d68b (PR #6 integrado) y la rama
 feature/Giron-Luciano-Documentacion-Deploy. Alcance: integrante E,
 documentacion, configuracion de despliegue y revision de PR. Fuente de
 requisitos: TP-N2-LYEP-GRUPO14.pdf, punto 4, paginas 11 y 12.
@@ -18,7 +18,7 @@ requisitos: TP-N2-LYEP-GRUPO14.pdf, punto 4, paginas 11 y 12.
 | CORS | Configurado en server/src/index.js con CLIENT_ORIGIN; default localhost:5173 |
 | Conexion independiente a Atlas | Aprobada tras corregir la URI privada para usar SRV y los hosts vigentes de Atlas |
 | CRUD completo y persistencia en Atlas | Aprobados desde la interfaz: alta, consulta, edicion, reinicio del backend, nueva consulta y borrado; comprobados directamente en Atlas |
-| Lint del frontend | 4 errores previos: importaciones sin uso en App.jsx y routes.jsx; variable catch sin uso y exportacion de contexto en AutorizacionesContext.jsx |
+| Lint del frontend | npm run lint aprobado, sin errores; se retiraron imports y variable sin uso y se separo el contexto de su componente proveedor |
 | Variables de produccion | Plantillas de backend y frontend, sin credenciales; .env privados ignorados |
 
 La URI privada tenia nombres de hosts que no resolvian. La consulta SRV
@@ -80,10 +80,10 @@ duplicado y deja la configuracion CORS en el servidor real.
    el 11/10/2026, incluida la persistencia tras reiniciar el backend.
 3. Resolver los puntos formales de PR, commits y nombre de rama descritos
    arriba. No reescribir el historial del equipo para simular cumplimiento.
-4. Revisar los cuatro errores previos de lint si se exige entregar todos
-   los controles estaticos en verde; no impidieron el build.
-5. Revisar e integrar el PR de documentacion y deploy y ejecutar los
-   comandos del README en la maquina del equipo.
+4. Lint, build y ocho pruebas de servicio aprobados tras los ajustes
+   minimos. Login y CRUD real repetidos sin errores JavaScript/CORS.
+5. El PR #6 de documentacion y deploy ya esta integrado. Incorporar por
+   PR los ajustes finales de lint y el registro actualizado de pruebas.
 
 Estado: funcionamiento tecnico verificado con la base real de Atlas;
 los controles formales anteriores se mantienen separados del resultado

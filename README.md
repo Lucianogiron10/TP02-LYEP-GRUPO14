@@ -20,7 +20,7 @@ de los ejemplos siguientes usan PowerShell.
 ```powershell
 cd server
 npm ci
-Copy-Item .env.example .env
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 ```
 
 En `server/.env`, completar MONGODB_URI con la conexion de Atlas del grupo.
@@ -102,8 +102,8 @@ npm run lint
 ```
 
 Las ocho pruebas existentes del servicio usan un servidor de prueba, no
-Atlas. El build genera client/dist. El lint tiene errores previos
-registrados en [la revision de entrega](docs/entrega-tecnica.md).
+Atlas. El build genera client/dist. Los resultados de lint, build y
+persistencia real se registran en [la revision de entrega](docs/entrega-tecnica.md).
 
 Para verificar persistencia real, ejecutar los casos CRUD del
 [integrante D](docs/test-cases.md), recargar la interfaz y reiniciar el
