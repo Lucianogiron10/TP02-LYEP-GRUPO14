@@ -15,11 +15,11 @@ try {
   await connectDB();
 } catch (error) {
   console.error('No se pudo conectar con MongoDB:', error.message);
-  process.exitCode = 1;
+  process.exit(1);
 }
 
 // Middlewares
-app.use(cors());
+app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173' }));
 app.use(express.json());
 
 // Rutas de la API
