@@ -50,19 +50,17 @@ GET, POST, PUT, DELETE y OPTIONS, incluido el encabezado Content-Type.
   tiene cuatro errores previos en App.jsx, AutorizacionesContext.jsx y
   routes.jsx.
 
-## Dependencia pendiente de los integrantes A y B
+## Estado de la integracion
 
-Al revisar `origin/main` en el commit `038d9d5`, `server/index.js` solo
-conecta MongoDB: no inicia Express ni publica rutas. La rama
-`feature/Coca-Mauricio-API-REST` en el commit `0a5df60` publica `/api/items`
-para productos (`name`, `description`, `price`) y no dispone de GET por id.
-Ese contrato no es compatible con las fichas de clientes.
+El PR #4 incorporo el backend de clientes en server/src/index.js con las
+rutas anteriores y el modelo Cliente. Ya no existe la incompatibilidad
+con /api/items detectada en la revision inicial. El PR #5 agrego la matriz
+de pruebas del integrante D en docs/test-cases.md.
 
-El frontend queda preparado para las rutas de clientes indicadas arriba.
-Es necesario que el integrante B las publique usando el modelo Cliente
-del integrante A. La persistencia real en Atlas y el CORS del backend del
-equipo aun no pudieron verificarse. Las pruebas con API simulada no
-acreditan esos puntos ni implementan un backend de reemplazo.
+Las instrucciones vigentes estan en el README general. Las verificaciones
+independientes y los pendientes de Atlas se registran en
+docs/entrega-tecnica.md. Las pruebas del servicio con API simulada no
+acreditan por si solas la conexion ni la persistencia en Atlas.
 
 ## Uso de IA
 
