@@ -1,6 +1,5 @@
-import { createContext, useState, useEffect } from 'react'
-
-export const AutorizacionesContext = createContext()
+import { useState, useEffect } from 'react'
+import { AutorizacionesContext } from './autorizaciones'
 
 const AutorizacionesProvider = ({ children }) => {
 
@@ -9,7 +8,7 @@ const AutorizacionesProvider = ({ children }) => {
   if (adminGuardado) {
     try {
       return JSON.parse(adminGuardado)
-    } catch (error) {
+    } catch {
       localStorage.removeItem('admin')
       return null
     }

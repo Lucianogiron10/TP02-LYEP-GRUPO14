@@ -1,6 +1,6 @@
 # Revision de entrega: punto 4, Tecnica
 
-Revision del 11/10/2026 sobre main 87c92f7 y la rama
+Revision del 11/10/2026 sobre main 9e2d68b (PR #6 integrado) y la rama
 feature/Giron-Luciano-Documentacion-Deploy. Alcance: integrante E,
 documentacion, configuracion de despliegue y revision de PR. Fuente de
 requisitos: TP-N2-LYEP-GRUPO14.pdf, punto 4, paginas 11 y 12.
@@ -16,16 +16,18 @@ requisitos: TP-N2-LYEP-GRUPO14.pdf, punto 4, paginas 11 y 12.
 | Puerto del frontend | Vite configurado en 5173 con strictPort |
 | Arranque sin URI | El backend termina con codigo 1 y no inicia HTTP |
 | CORS | Configurado en server/src/index.js con CLIENT_ORIGIN; default localhost:5173 |
-| Conexion independiente a Atlas | Fallo MongooseServerSelectionError con ENOTFOUND en los hosts configurados; no pudo verificarse desde este entorno |
-| CRUD completo y persistencia en Atlas | Pendiente de reproducir con conexion habilitada; la matriz del integrante D lo registra como aprobado |
-| Lint del frontend | 4 errores previos: importaciones sin uso en App.jsx y routes.jsx; variable catch sin uso y exportacion de contexto en AutorizacionesContext.jsx |
+| Conexion independiente a Atlas | Aprobada tras corregir la URI privada para usar SRV y los hosts vigentes de Atlas |
+| CRUD completo y persistencia en Atlas | Aprobados desde la interfaz: alta, consulta, edicion, reinicio del backend, nueva consulta y borrado; comprobados directamente en Atlas |
+| Lint del frontend | npm run lint aprobado, sin errores; se retiraron imports y variable sin uso y se separo el contexto de su componente proveedor |
 | Variables de produccion | Plantillas de backend y frontend, sin credenciales; .env privados ignorados |
 
-El diagnostico indica una falla DNS antes de la autenticacion: los hosts
-de la URI configurada no se resolvieron desde este entorno. Obtener la
-URI vigente desde Connect en Atlas y revisar DNS y estado del cluster;
-despues comprobar Network Access y usuario de Atlas. No se crearon ni alteraron
-clientes en Atlas durante esta revision: la prueba se detuvo al conectar.
+La URI privada tenia nombres de hosts que no resolvian. La consulta SRV
+de Atlas devolvio los hosts vigentes y permitio conectar con las mismas
+credenciales. Se corrigio solamente server/.env, que no se publica.
+La prueba automatizada de navegador ingreso con el usuario de Gerencia,
+creo un cliente temporal, verifico su alta y edicion directamente en
+Atlas, reinicio el backend y comprobo persistencia antes de eliminarlo.
+No se modificaron clientes existentes. No hubo errores de JavaScript ni CORS.
 Una respuesta HTTP de bienvenida sin conexion a la base no acredita
 persistencia; por eso el proceso ahora termina si MongoDB falla.
 
@@ -74,19 +76,18 @@ duplicado y deja la configuracion CORS en el servidor real.
 1. Cambiar la contrasena de Atlas que aparecia en server/.env.example.
    El ejemplo ya se reemplazo por placeholders, pero la credencial sigue
    en el historial. Actualizar el .env privado y no volver a publicarlo.
-2. Habilitar la conexion a Atlas y repetir desde la interfaz: crear un
-   cliente de prueba, consultar, editar, reiniciar backend, consultar de
-   nuevo y eliminar. Adjuntar evidencia de persistencia sin credenciales.
+2. Conexion a Atlas y prueba completa de interfaz: resueltas y aprobadas
+   el 11/10/2026, incluida la persistencia tras reiniciar el backend.
 3. Resolver los puntos formales de PR, commits y nombre de rama descritos
    arriba. No reescribir el historial del equipo para simular cumplimiento.
-4. Revisar los cuatro errores previos de lint si se exige entregar todos
-   los controles estaticos en verde; no impidieron el build.
-5. Revisar e integrar el PR de documentacion y deploy y ejecutar los
-   comandos del README en la maquina del equipo.
+4. Lint, build y ocho pruebas de servicio aprobados tras los ajustes
+   minimos. Login y CRUD real repetidos sin errores JavaScript/CORS.
+5. El PR #6 de documentacion y deploy ya esta integrado. Incorporar por
+   PR los ajustes finales de lint y el registro actualizado de pruebas.
 
-Estado: documentacion y configuracion de E preparadas; no se puede afirmar
-que todo el punto 4 este cumplido mientras persistan los pendientes
-tecnicos y formales. No se publico un despliegue en la nube; la consigna
+Estado: funcionamiento tecnico verificado con la base real de Atlas;
+los controles formales anteriores se mantienen separados del resultado
+de ejecucion. No se publico un despliegue en la nube; la consigna
 comprueba ejecucion local en 5173 y 3001.
 
 ## Declaratoria de uso de IA
